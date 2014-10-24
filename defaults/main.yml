@@ -1,5 +1,5 @@
 ---
-newrelic_redis_agent_version: 1.0.1
+newrelic_redis_agent_version: 1.0.2
 newrelic_redis_agent_binary_path: /usr/local/bin/newrelic_redis_agent
 newrelic_redis_agent_conf_path: /etc/newrelic/newrelic_redis_agent.yml
 newrelic_redis_agent_template: newrelic_redis_agent.yml.j2
