@@ -4,9 +4,10 @@
   register: newrelic_redis_agent_installed
   failed_when: no
 
+# Use fork until https://github.com/kenjij/newrelic_redis_plugin/pull/2 is merged
 - name: install newrelic_redis_agent
   get_url:
-    url="https://github.com/kenjij/newrelic_redis_plugin/archive/v{{newrelic_redis_agent_version}}.tar.gz"
+    url="https://github.com/modcloth/newrelic_redis_plugin/archive/v{{newrelic_redis_agent_version}}.tar.gz"
     dest="/tmp/newrelic_redis_plugin.tar.gz"
   when: newrelic_redis_agent_installed.rc != 0
 

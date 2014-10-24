@@ -2,7 +2,7 @@ modcloth.newrelic_redis_agent
 =========
 
 This role installs and configures the New Relic Redis agent
-[https://github.com/kenjij/newrelic_redis_plugin](https://github.com/kenjij/newrelic_redis_plugin)
+[https://github.com/modcloth/newrelic_redis_plugin](https://github.com/modcloth/newrelic_redis_plugin)
 
 Requirements
 ------------
