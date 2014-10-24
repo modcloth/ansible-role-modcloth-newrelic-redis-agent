@@ -1,0 +1,50 @@
+---
+- name: check if newrelic_redis_agent is installed
+  shell: which newrelic_redis_agent
+  register: newrelic_redis_agent_installed
+  failed_when: no
+
+- name: install newrelic_redis_agent
+  get_url:
+    url="https://github.com/kenjij/newrelic_redis_plugin/archive/v{{newrelic_redis_agent_version}}.tar.gz"
+    dest="/tmp/newrelic_redis_plugin.tar.gz"
+  when: newrelic_redis_agent_installed.rc != 0
+
+- name: untar newrelic_redis_agent
+  shell: 'tar xfvz /tmp/newrelic_redis_plugin.tar.gz -O \
+          newrelic_redis_plugin-{{newrelic_redis_agent_version}}/newrelic_redis_agent \
+            > {{newrelic_redis_agent_binary_path}}'
+  args:
+    creates: '{{newrelic_redis_agent_binary_path}}'
+
+- name: 'install newrelic_redis dependencies'
+  gem: name={{item}} user_install=no
+  with_items:
+  - newrelic_plugin
+  - redis
+  - dante
+
+- name: make newrelic_redis_agent executable
+  file:
+    path='{{newrelic_redis_agent_binary_path}}'
+    mode=0755
+
+- name: template configuration
+  template:
+    src='{{newrelic_redis_agent_template}}'
+    dest='{{newrelic_redis_agent_conf_path}}'
+  register: newrelic_redis_agent_template
+
+- name: add upstart configuration
+  template:
+    src=newrelic_redis_agent.conf.j2
+    dest=/etc/init/newrelic_redis_agent.conf
+  register: newrelic_redis_agent_upstart
+
+- name: restart service
+  service: name=newrelic_redis_agent state=restarted
+  when: newrelic_redis_agent_template.changed or
+        newrelic_redis_agent_upstart.changed
+
+- name: start service
+  service: name=newrelic_redis_agent state=started

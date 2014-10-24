@@ -1,0 +1,18 @@
+# {{ansible_managed}}
+# vim: ft=yaml
+
+newrelic:
+  license_key: {{new_relic_license_key}}
+  verbose: {{newrelic_redis_agent_verbose}}
+
+agents:
+  redis:
+  {% for agent in newrelic_redis_agent_agents %}
+  - url: {{agent.uri}}
+    {% if agent.instance_name is defined -%}
+    instance_name: {{agent.instance_name}}
+    {% endif -%}
+    {% if agent.database is defined -%}
+    database: {{agent.proxy}}
+    {% endif -%}
+  {% endfor %}
