@@ -33,7 +33,8 @@
   template:
     src='{{newrelic_redis_agent_template}}'
     dest='{{newrelic_redis_agent_conf_path}}'
-  register: newrelic_redis_agent_template
+  when: newrelic_redis_agent_template != ""
+  register: newrelic_redis_agent_templated
 
 - name: add upstart configuration
   template:
@@ -43,7 +44,7 @@
 
 - name: restart service
   service: name=newrelic_redis_agent state=restarted
-  when: newrelic_redis_agent_template.changed or
+  when: newrelic_redis_agent_templated.changed or
         newrelic_redis_agent_upstart.changed
 
 - name: start service
