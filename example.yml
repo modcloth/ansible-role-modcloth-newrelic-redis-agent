@@ -1,0 +1,7 @@
+---
+- hosts: all
+  roles:
+  - role: modcloth.newrelic-redis-agent
+    new_relic_license_key: 'ABC'
+    newrelic_redis_plugin_agents:
+    - uri: 'redis://localhost:6379'
