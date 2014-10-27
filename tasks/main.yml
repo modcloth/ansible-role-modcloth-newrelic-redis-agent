@@ -30,6 +30,9 @@
     path='{{newrelic_redis_agent_binary_path}}'
     mode=0755
 
+- name: create configuration directory
+  file: path="{{newrelic_redis_agent_conf_path|dirname}}" state=directory
+
 - name: template configuration
   template:
     src='{{newrelic_redis_agent_template}}'
